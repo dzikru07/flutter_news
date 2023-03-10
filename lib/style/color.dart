@@ -4,6 +4,18 @@ Color mainColor = Color(0xff387BCB);
 Color appBarColorAccent = Color(0xffFFDEDE);
 Color carouselColorAccent = Color(0xffFFC6AD);
 
+//card color
+Color cardMainColor = Color(0xffF8F8F8);
+Color cardTitleColor = Color(0xff323232);
+Color cardSubTitleColor = Color(0xff888888);
+Color cardDateColor = Color(0xffF93C0D9);
+Color cardAuthorColor = Color(0xffFFD8FB);
+
+//bottom nav bar
+Color navBarActiveCOlor = Color(0xffEEEEEE);
+Color navBarActiveIcon = Color(0xff000000);
+Color navBarInActiveIcon = Color(0xff000000);
+
 Map<int, Color> mainTheme = {
   50: const Color(0xff387BCB),
   100: const Color(0xff387BCB),
