@@ -28,16 +28,16 @@ class _BottomNavBarState extends State<BottomNavBar>
     // TODO: implement initState
     super.initState();
     _controller = AnimationController(
-      duration: Duration(milliseconds: 300),
+      duration: Duration(milliseconds: 800),
       vsync: this,
     )..forward();
     _controller2 = AnimationController(
-      duration: Duration(milliseconds: 300),
+      duration: Duration(milliseconds: 400),
       vsync: this,
     )..forward();
     animated = CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeInBack,
+      curve: Curves.bounceOut,
     );
     animated2 = CurvedAnimation(
       parent: _controller2,
@@ -46,16 +46,16 @@ class _BottomNavBarState extends State<BottomNavBar>
   }
 
   runAnimation() {
-    _controller.reset();
+    _controller.repeat();
     _controller.forward();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
+    _controller.dispose();
+    _controller.dispose();
     super.dispose();
-    _controller.dispose();
-    _controller.dispose();
   }
 
   @override
@@ -107,7 +107,7 @@ class _BottomNavBarState extends State<BottomNavBar>
                           pageIndex == 0
                               ? UniconsLine.home
                               : UniconsLine.newspaper,
-                          size: 20,
+                          size: 25,
                           color: pageIndex == 0
                               ? navBarActiveIcon
                               : navBarInActiveIcon)),
@@ -133,7 +133,7 @@ class _BottomNavBarState extends State<BottomNavBar>
                           pageIndex == 1
                               ? UniconsLine.search_plus
                               : UniconsLine.search,
-                          size: 20,
+                          size: 25,
                           color: pageIndex == 1
                               ? navBarActiveIcon
                               : navBarInActiveIcon)),
@@ -159,7 +159,7 @@ class _BottomNavBarState extends State<BottomNavBar>
                           pageIndex == 2
                               ? UniconsLine.heartbeat
                               : UniconsLine.heart,
-                          size: 20,
+                          size: 25,
                           color: pageIndex == 2
                               ? navBarActiveIcon
                               : navBarInActiveIcon)),
@@ -185,7 +185,7 @@ class _BottomNavBarState extends State<BottomNavBar>
                           pageIndex == 3
                               ? UniconsLine.user_square
                               : UniconsLine.user,
-                          size: 20,
+                          size: 25,
                           color: pageIndex == 3
                               ? navBarActiveIcon
                               : navBarInActiveIcon)),

@@ -79,13 +79,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ],
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
-                Text(
-                  'Top Headlines',
-                  style: GoogleFonts.montserrat(
-                      fontSize: 20, fontWeight: FontWeight.w700),
-                ),
+                // Text(
+                //   'Top Headlines',
+                //   style: GoogleFonts.montserrat(
+                //       fontSize: 20, fontWeight: FontWeight.w700),
+                // ),
                 CarouselSlider(
                   options:
                       CarouselOptions(height: _height / 3, viewportFraction: 1),
@@ -227,90 +227,96 @@ class _ListNewsCategoryState extends State<ListNewsCategory> {
         shrinkWrap: true,
         physics: ScrollPhysics(),
         itemBuilder: (context, index) {
-          return Container(
-            padding: EdgeInsets.all(8),
-            margin: EdgeInsets.only(top: 15),
-            decoration: BoxDecoration(
-                color: cardMainColor, borderRadius: BorderRadius.circular(15)),
-            child: Row(
-              children: [
-                Container(
-                  height: 110,
-                  width: 110,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/newsList.png"))),
-                ),
-                SizedBox(
-                  width: 12,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Battle for Big-Money Donors',
-                      style: GoogleFonts.montserrat(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: cardTitleColor),
-                    ),
-                    SizedBox(
-                      width: _width / 1.6,
-                      child: Text(
-                        '"The former president and the Florida governor this week intensify fight for campaign cash"',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+          return InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, "/card/detail");
+            },
+            child: Container(
+              padding: EdgeInsets.all(8),
+              margin: EdgeInsets.only(top: 15),
+              decoration: BoxDecoration(
+                  color: cardMainColor,
+                  borderRadius: BorderRadius.circular(15)),
+              child: Row(
+                children: [
+                  Container(
+                    height: 110,
+                    width: 110,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            image: AssetImage("assets/images/newsList.png"))),
+                  ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Battle for Big-Money Donors',
                         style: GoogleFonts.montserrat(
                             fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: cardSubTitleColor),
+                            fontWeight: FontWeight.w600,
+                            color: cardTitleColor),
                       ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: cardDateColor,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Text(
-                            '26 May 2023',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: GoogleFonts.montserrat(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white),
+                      SizedBox(
+                        width: _width / 1.6,
+                        child: Text(
+                          '"The former president and the Florida governor this week intensify fight for campaign cash"',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: GoogleFonts.montserrat(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: cardSubTitleColor),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                color: cardDateColor,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Text(
+                              '26 May 2023',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white),
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: cardAuthorColor,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Text(
-                            'Dorry Mens',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: GoogleFonts.montserrat(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white),
+                          SizedBox(
+                            width: 8,
                           ),
-                        ),
-                      ],
-                    )
-                  ],
-                )
-              ],
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                color: cardAuthorColor,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Text(
+                              'Dorry Mens',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           );
         });
