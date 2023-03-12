@@ -9,7 +9,7 @@ Color cardMainColor = Color(0xffF8F8F8);
 Color cardTitleColor = Color(0xff323232);
 Color cardSubTitleColor = Color(0xff888888);
 Color cardDateColor = Color(0xffF93C0D9);
-Color cardAuthorColor = Color(0xffFFD8FB);
+Color cardAuthorColor = Color.fromARGB(255, 252, 115, 238);
 
 //bottom nav bar
 Color navBarActiveCOlor = Color(0xffEEEEEE);

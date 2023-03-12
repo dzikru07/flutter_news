@@ -6,13 +6,16 @@ import '../component/page_transition/page_transtition.dart';
 
 class AppRoute {
   Route onGenerateRoute(RouteSettings routeSettings) {
+    final args = routeSettings.arguments;
     switch (routeSettings.name) {
       case '/':
         return MaterialPageRoute(builder: (_) => SplashScreenPage());
       case '/home':
         return PageTransitionEaseOutQuart(BottomNavBar());
       case '/card/detail':
-        return PageTransitionDetailCard(NewsDetailsPage());
+        return MaterialPageRoute(
+            settings: RouteSettings(arguments: args),
+            builder: (_) => NewsDetailsPage());
       default:
         return MaterialPageRoute(builder: (_) => SplashScreenPage());
     }

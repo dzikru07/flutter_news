@@ -31,12 +31,13 @@ dependencies:
   bloc: ^8.1.1
   carousel_slider: ^4.2.1
   cupertino_icons: ^1.0.2
-  dotenv: ^4.1.0
+  equatable: ^2.0.5
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.2
   google_fonts: ^4.0.3
   http: ^0.13.5
+  intl: ^0.18.0
   unicons: ^2.1.0
 
 dev_dependencies:

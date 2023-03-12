@@ -1,14 +1,32 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../style/color.dart';
+import '../bloc/home_bloc_bloc.dart';
+import '../component_page/list_categories.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
-  State<HomePage> createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    return Material(
+      child: BlocProvider(
+        create: (context) => HomeBlocBloc()..add(HomeBlocEvent()),
+        child: HomePageBloc(),
+      ),
+    );
+  }
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+class HomePageBloc extends StatefulWidget {
+  @override
+  State<HomePageBloc> createState() => _HomePageBlocState();
+}
+
+class _HomePageBlocState extends State<HomePageBloc>
+    with TickerProviderStateMixin {
   late TabController _tabController;
   @override
   void initState() {
@@ -18,6 +36,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    HomeBlocBloc cobaListData = context.read<HomeBlocBloc>();
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
     return SafeArea(
@@ -81,70 +100,87 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 SizedBox(
                   height: 10,
                 ),
-                // Text(
-                //   'Top Headlines',
-                //   style: GoogleFonts.montserrat(
-                //       fontSize: 20, fontWeight: FontWeight.w700),
-                // ),
-                CarouselSlider(
-                  options:
-                      CarouselOptions(height: _height / 3, viewportFraction: 1),
-                  items: [1, 2, 3, 4, 5].map((i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                          margin: EdgeInsets.symmetric(horizontal: 5.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/slider_image.png'))),
-                          child: Padding(
-                            padding: EdgeInsets.all(20),
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.8),
-                                      borderRadius: BorderRadius.circular(10)),
+                BlocBuilder<HomeBlocBloc, HomeBlocState>(
+                  bloc: cobaListData,
+                  builder: (context, state) {
+                    if (state is ListNewsLoaded) {
+                      return CarouselSlider(
+                        options:
+                            CarouselOptions(height: 210, viewportFraction: 1),
+                        items: state.listData.articles.map((i) {
+                          return Builder(
+                            builder: (BuildContext context) {
+                              return Container(
+                                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                          i.urlToImage.toString(),
+                                        ),
+                                        fit: BoxFit.cover)),
+                                child: Padding(
+                                  padding: EdgeInsets.all(20),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Last call to apply to pitch at TechCrunchs (virtual) event in Boston',
-                                        style: GoogleFonts.montserrat(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
                                       Container(
-                                        padding: EdgeInsets.all(5),
+                                        padding: EdgeInsets.all(10),
                                         decoration: BoxDecoration(
-                                            color: mainColor,
+                                            color:
+                                                Colors.white.withOpacity(0.8),
                                             borderRadius:
-                                                BorderRadius.circular(4)),
-                                        child: Text(
-                                          'Mat Huddon',
-                                          style: GoogleFonts.montserrat(
-                                              fontSize: 10,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
+                                                BorderRadius.circular(10)),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              i.description.toString(),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style: GoogleFonts.montserrat(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            SizedBox(
+                                              height: 8,
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                  color: mainColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(4)),
+                                              child: Text(
+                                                i.author.toString(),
+                                                style: GoogleFonts.montserrat(
+                                                    fontSize: 10,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                            )
+                                          ],
                                         ),
                                       )
                                     ],
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  }).toList(),
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
+                      );
+                    } else {
+                      Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
                 ),
                 TabBar(
                   controller: _tabController,
@@ -192,11 +228,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   height: _height / 2,
                   child: TabBarView(
                     controller: _tabController,
-                    children: const <Widget>[
-                      ListNewsCategory(),
-                      ListNewsCategory(),
-                      ListNewsCategory(),
-                      ListNewsCategory(),
+                    children: <Widget>[
+                      ListNewsCategory(category: "business"),
+                      ListNewsCategory(category: "science"),
+                      ListNewsCategory(category: "health"),
+                      ListNewsCategory(category: "sports"),
                     ],
                   ),
                 ),
@@ -206,119 +242,5 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
       ),
     );
-  }
-}
-
-class ListNewsCategory extends StatefulWidget {
-  const ListNewsCategory({super.key});
-
-  @override
-  State<ListNewsCategory> createState() => _ListNewsCategoryState();
-}
-
-class _ListNewsCategoryState extends State<ListNewsCategory> {
-  @override
-  Widget build(BuildContext context) {
-    double _width = MediaQuery.of(context).size.width;
-    double _height = MediaQuery.of(context).size.height;
-
-    return ListView.builder(
-        itemCount: 7,
-        shrinkWrap: true,
-        physics: ScrollPhysics(),
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, "/card/detail");
-            },
-            child: Container(
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.only(top: 15),
-              decoration: BoxDecoration(
-                  color: cardMainColor,
-                  borderRadius: BorderRadius.circular(15)),
-              child: Row(
-                children: [
-                  Container(
-                    height: 110,
-                    width: 110,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            image: AssetImage("assets/images/newsList.png"))),
-                  ),
-                  SizedBox(
-                    width: 12,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Battle for Big-Money Donors',
-                        style: GoogleFonts.montserrat(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: cardTitleColor),
-                      ),
-                      SizedBox(
-                        width: _width / 1.6,
-                        child: Text(
-                          '"The former president and the Florida governor this week intensify fight for campaign cash"',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: GoogleFonts.montserrat(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: cardSubTitleColor),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                color: cardDateColor,
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Text(
-                              '26 May 2023',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: GoogleFonts.montserrat(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                color: cardAuthorColor,
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Text(
-                              'Dorry Mens',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: GoogleFonts.montserrat(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-          );
-        });
   }
 }

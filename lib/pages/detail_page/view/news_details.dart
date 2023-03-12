@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_news/component/format/time_format.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../../style/color.dart';
+import '../../home_page/models/news_models.dart';
 
 class NewsDetailsPage extends StatefulWidget {
   const NewsDetailsPage({super.key});
@@ -14,6 +16,8 @@ class NewsDetailsPage extends StatefulWidget {
 class _NewsDetailsPageState extends State<NewsDetailsPage> {
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Article;
+
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
     return SafeArea(
@@ -31,8 +35,8 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                         borderRadius:
                             BorderRadius.only(bottomLeft: Radius.circular(50)),
                         image: DecorationImage(
-                            image: AssetImage(
-                              "assets/images/newsListDetail.png",
+                            image: NetworkImage(
+                              args.urlToImage.toString(),
                             ),
                             fit: BoxFit.cover)),
                   ),
@@ -75,18 +79,18 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                       children: [
                         Row(
                           children: [
+                            // Text(
+                            //   args.source.toString(),
+                            //   style: GoogleFonts.montserrat(
+                            //       fontSize: 12,
+                            //       fontWeight: FontWeight.w600,
+                            //       color: cardSubTitleColor),
+                            // ),
+                            // SizedBox(
+                            //   width: _width / 14,
+                            // ),
                             Text(
-                              "Bussiness",
-                              style: GoogleFonts.montserrat(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: cardSubTitleColor),
-                            ),
-                            SizedBox(
-                              width: _width / 14,
-                            ),
-                            Text(
-                              "23 January 2023",
+                              FormatData().getDataFormat(args.publishedAt),
                               style: GoogleFonts.montserrat(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -104,9 +108,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                       height: 10,
                     ),
                     Text(
-                      "Battle for Big-Money Donors",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                      args.title,
                       style: GoogleFonts.montserrat(
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
@@ -116,7 +118,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                       height: 8,
                     ),
                     Text(
-                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                      args.description.toString(),
                       style: GoogleFonts.montserrat(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -140,7 +142,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Nobby Hayy",
+                              args.author.toString(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.montserrat(
@@ -152,7 +154,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                               height: 2,
                             ),
                             Text(
-                              "25 March 2023",
+                              args.source.name.toString(),
                               style: GoogleFonts.montserrat(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
