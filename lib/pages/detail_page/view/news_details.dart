@@ -7,7 +7,9 @@ import '../../../style/color.dart';
 import '../../home_page/models/news_models.dart';
 
 class NewsDetailsPage extends StatefulWidget {
-  const NewsDetailsPage({super.key});
+  NewsDetailsPage({super.key, required this.data});
+
+  Article data;
 
   @override
   State<NewsDetailsPage> createState() => _NewsDetailsPageState();
@@ -16,7 +18,6 @@ class NewsDetailsPage extends StatefulWidget {
 class _NewsDetailsPageState extends State<NewsDetailsPage> {
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Article;
 
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
@@ -36,7 +37,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                             BorderRadius.only(bottomLeft: Radius.circular(50)),
                         image: DecorationImage(
                             image: NetworkImage(
-                              args.urlToImage.toString(),
+                              widget.data.urlToImage.toString(),
                             ),
                             fit: BoxFit.cover)),
                   ),
@@ -80,7 +81,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                         Row(
                           children: [
                             // Text(
-                            //   args.source.toString(),
+                            //   widget.data.source.toString(),
                             //   style: GoogleFonts.montserrat(
                             //       fontSize: 12,
                             //       fontWeight: FontWeight.w600,
@@ -90,7 +91,8 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                             //   width: _width / 14,
                             // ),
                             Text(
-                              FormatData().getDataFormat(args.publishedAt),
+                              FormatData()
+                                  .getDataFormat(widget.data.publishedAt),
                               style: GoogleFonts.montserrat(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -108,7 +110,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                       height: 10,
                     ),
                     Text(
-                      args.title,
+                      widget.data.title,
                       style: GoogleFonts.montserrat(
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
@@ -118,7 +120,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                       height: 8,
                     ),
                     Text(
-                      args.description.toString(),
+                      widget.data.description.toString(),
                       style: GoogleFonts.montserrat(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -142,7 +144,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              args.author.toString(),
+                              widget.data.author.toString(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.montserrat(
@@ -154,7 +156,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                               height: 2,
                             ),
                             Text(
-                              args.source.name.toString(),
+                              widget.data.source.name.toString(),
                               style: GoogleFonts.montserrat(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,

@@ -110,63 +110,71 @@ class _HomePageBlocState extends State<HomePageBloc>
                         items: state.listData.articles.map((i) {
                           return Builder(
                             builder: (BuildContext context) {
-                              return Container(
-                                margin: EdgeInsets.symmetric(horizontal: 5.0),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                          i.urlToImage.toString(),
-                                        ),
-                                        fit: BoxFit.cover)),
-                                child: Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                            color:
-                                                Colors.white.withOpacity(0.8),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              i.description.toString(),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.left,
-                                              style: GoogleFonts.montserrat(
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                  color: mainColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(4)),
-                                              child: Text(
-                                                i.author.toString(),
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pushNamed("/card/detail", arguments: i);
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                            i.urlToImage.toString(),
+                                          ),
+                                          fit: BoxFit.cover)),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              color:
+                                                  Colors.white.withOpacity(0.8),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                i.description.toString(),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.left,
                                                 style: GoogleFonts.montserrat(
                                                     fontSize: 10,
-                                                    color: Colors.white,
                                                     fontWeight:
                                                         FontWeight.w600),
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                              SizedBox(
+                                                height: 8,
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                    color: mainColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4)),
+                                                child: Text(
+                                                  i.author.toString(),
+                                                  style: GoogleFonts.montserrat(
+                                                      fontSize: 10,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );

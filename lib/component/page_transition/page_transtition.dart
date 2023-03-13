@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_news/pages/home_page/models/news_models.dart';
+
+import '../../pages/detail_page/view/news_details.dart';
 
 class PageTransitionEaseOutQuart extends PageRouteBuilder {
   final Widget page;
@@ -25,11 +28,16 @@ class PageTransitionEaseOutQuart extends PageRouteBuilder {
 }
 
 class PageTransitionDetailCard extends PageRouteBuilder {
-  final Widget page;
+  var data;
 
-  PageTransitionDetailCard(this.page)
+  PageTransitionDetailCard(
+    this.data,
+  )
       : super(
-          pageBuilder: (context, animation, anotherAnimation) => page,
+          pageBuilder: (context, animation, anotherAnimation) =>
+              NewsDetailsPage(
+            data: data,
+          ),
           transitionDuration: Duration(milliseconds: 1000),
           transitionsBuilder: (context, animation, anotherAnimation, child) {
             animation = CurvedAnimation(
@@ -40,7 +48,9 @@ class PageTransitionDetailCard extends PageRouteBuilder {
               alignment: Alignment.bottomRight,
               child: SizeTransition(
                 sizeFactor: animation,
-                child: page,
+                child: NewsDetailsPage(
+                  data: data,
+                ),
                 axisAlignment: 0,
               ),
             );
