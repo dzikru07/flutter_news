@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unicons/unicons.dart';
 import '../../../component/error_handling/view/api_error.dart';
+import '../../../component/error_handling/view/network_error.dart';
 import '../../../style/color.dart';
 import '../bloc/home_bloc_bloc.dart';
 import '../component_page/list_categories.dart';
@@ -192,6 +193,12 @@ class _HomePageBlocState extends State<HomePageBloc>
                     } else if (state is ListNewsApiError) {
                       return ErrorApiPage(
                         message: state.data.message,
+                        height: _height,
+                        width: _width,
+                      );
+                    } else if (state is ListNewsError) {
+                      return ErrorNetworkPage(
+                        message: state.message,
                         height: _height,
                         width: _width,
                       );
