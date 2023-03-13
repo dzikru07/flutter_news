@@ -2,6 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:unicons/unicons.dart';
+import '../../../component/error_handling/view/api_error.dart';
 import '../../../style/color.dart';
 import '../bloc/home_bloc_bloc.dart';
 import '../component_page/list_categories.dart';
@@ -89,9 +91,14 @@ class _HomePageBlocState extends State<HomePageBloc>
                         SizedBox(
                           width: 10,
                         ),
-                        Image.asset(
-                          'assets/icons/profile_icon.png',
-                          width: 45,
+                        InkWell(
+                          onTap: () {
+                            print(cobaListData.state);
+                          },
+                          child: Image.asset(
+                            'assets/icons/profile_icon.png',
+                            width: 45,
+                          ),
                         ),
                       ],
                     ),
@@ -182,12 +189,17 @@ class _HomePageBlocState extends State<HomePageBloc>
                           );
                         }).toList(),
                       );
+                    } else if (state is ListNewsApiError) {
+                      return ErrorApiPage(
+                        message: state.data.message,
+                        height: _height,
+                        width: _width,
+                      );
                     } else {
-                      Center(
+                      return Center(
                         child: CircularProgressIndicator(),
                       );
                     }
-                    return Center(child: CircularProgressIndicator());
                   },
                 ),
                 TabBar(

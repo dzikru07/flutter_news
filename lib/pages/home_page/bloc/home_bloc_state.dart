@@ -29,6 +29,16 @@ class ListNewsError extends HomeBlocState {
   List<Object?> get props => [message];
 }
 
+class ListNewsApiError extends HomeBlocState {
+  ErrorModels data;
+
+  ListNewsApiError(this.data);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [data];
+}
+
 class ListNewsLoading extends HomeBlocState {
   @override
   // TODO: implement props

@@ -15,7 +15,6 @@ class ServicePage {
     try {
       http.Response response =
           await _apiService.getApiData("/v2/everything", param);
-      inspect(response);
       return response;
     } catch (e) {
       return e;

@@ -7,6 +7,8 @@ import 'package:flutter_news/pages/home_page/models/news_models.dart';
 import 'package:flutter_news/pages/home_page/service/service_page.dart';
 import 'package:meta/meta.dart';
 
+import '../../../component/error_handling/models/error_models.dart';
+
 part 'home_bloc_event.dart';
 part 'home_bloc_state.dart';
 
@@ -19,8 +21,13 @@ class HomeBlocBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
         emit(ListNewsLoading());
         final data =
             await servicePage.getListData(event.searchValue.toString());
-        NewsListModels dataList = newsListModelsFromJson(data.body);
+        if (data.statusCode == 200) {
+          NewsListModels dataList = newsListModelsFromJson(data.body);
         emit(ListNewsLoaded(dataList));
+        } else {
+          ErrorModels dataList = errorModelsFromJson(data.body);
+          emit(ListNewsApiError(dataList));
+        }
       } catch (e) {
         emit(ListNewsError(e.toString()));
       }

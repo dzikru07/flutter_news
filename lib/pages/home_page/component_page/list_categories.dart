@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../component/error_handling/view/api_error.dart';
 import '../../../component/format/time_format.dart';
 import '../../../style/color.dart';
 import '../bloc/home_bloc_bloc.dart';
@@ -163,7 +164,13 @@ class _ListNewsCategoryBlocState extends State<ListNewsCategoryBloc> {
                   ),
                 );
               });
-        } else {
+        } else if (state is ListNewsApiError) {
+          return ErrorApiPage(
+            message: state.data.message,
+            height: _height,
+            width: _width,
+          );
+        } else { 
           return Center(
             child: CircularProgressIndicator(),
           );

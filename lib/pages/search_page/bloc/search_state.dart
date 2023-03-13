@@ -27,6 +27,16 @@ class ListNewsError extends SearchState {
   List<Object?> get props => [message];
 }
 
+class ListNewsApiError extends SearchState {
+  ErrorModels data;
+
+  ListNewsApiError(this.data);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [data];
+}
+
 class ListNewsLoading extends SearchState {
   @override
   // TODO: implement props

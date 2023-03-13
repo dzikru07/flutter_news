@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../component/error_handling/models/error_models.dart';
 import '../../home_page/models/news_models.dart';
 import '../service/service_page.dart';
 
@@ -15,8 +16,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         emit(ListNewsLoading());
         final data =
             await servicePage.getListData(event.searchValue.toString());
-        NewsListModels dataList = newsListModelsFromJson(data.body);
+        if (data.statusCode == 200) {
+          NewsListModels dataList = newsListModelsFromJson(data.body);
         emit(ListNewsLoaded(dataList));
+        } else {
+          ErrorModels dataList = errorModelsFromJson(data.body);
+          emit(ListNewsApiError(dataList));
+        }
       } catch (e) {
         emit(ListNewsError(e.toString()));
       }
