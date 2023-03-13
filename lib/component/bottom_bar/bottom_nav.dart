@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:unicons/unicons.dart';
-
 import '../../pages/home_page/view/home_page.dart';
+import '../../pages/search_page/view/search_page.dart';
 import '../../style/color.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -15,7 +15,7 @@ class _BottomNavBarState extends State<BottomNavBar>
     with TickerProviderStateMixin {
   int pageIndex = 0;
 
-  List page = [HomePage(), HomePage(), HomePage(), HomePage()];
+  List page = [HomePage(), SearchPage(), HomePage(), HomePage()];
 
   late final AnimationController _controller;
   late final AnimationController _controller2;
@@ -54,7 +54,7 @@ class _BottomNavBarState extends State<BottomNavBar>
   void dispose() {
     // TODO: implement dispose
     _controller.dispose();
-    _controller.dispose();
+    _controller2.dispose();
     super.dispose();
   }
 
