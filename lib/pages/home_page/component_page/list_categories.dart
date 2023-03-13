@@ -19,8 +19,7 @@ class ListNewsCategory extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => HomeBlocBlocWithSearch()
-              ..add(HomeBlocEventWithSearch(category)),
+            create: (context) => HomeBlocBloc()..add(HomeBlocEvent(category)),
           ),
         ],
         child: ListNewsCategoryBloc(),
@@ -39,13 +38,12 @@ class ListNewsCategoryBloc extends StatefulWidget {
 class _ListNewsCategoryBlocState extends State<ListNewsCategoryBloc> {
   @override
   Widget build(BuildContext context) {
-    HomeBlocBlocWithSearch cobaListData =
-        context.read<HomeBlocBlocWithSearch>();
+    HomeBlocBloc cobaListData = context.read<HomeBlocBloc>();
 
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
 
-    return BlocBuilder<HomeBlocBlocWithSearch, HomeBlocState>(
+    return BlocBuilder<HomeBlocBloc, HomeBlocState>(
       bloc: cobaListData,
       builder: (context, state) {
         if (state is ListNewsLoaded) {

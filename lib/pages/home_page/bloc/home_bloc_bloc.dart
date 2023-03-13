@@ -17,7 +17,8 @@ class HomeBlocBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
     on<HomeBlocEvent>((event, emit) async {
       try {
         emit(ListNewsLoading());
-        final data = await servicePage.getListData();
+        final data =
+            await servicePage.getListData(event.searchValue.toString());
         NewsListModels dataList = newsListModelsFromJson(data.body);
         emit(ListNewsLoaded(dataList));
       } catch (e) {
@@ -27,21 +28,3 @@ class HomeBlocBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
   }
 }
 
-class HomeBlocBlocWithSearch
-    extends Bloc<HomeBlocEventWithSearch, HomeBlocState> {
-  HomeBlocBlocWithSearch() : super(HomeBlocInitial()) {
-    ServicePage servicePage = ServicePage();
-
-    on<HomeBlocEventWithSearch>((event, emit) async {
-      try {
-        emit(ListNewsLoading());
-        final data = await servicePage
-            .getListDataWithSearch(event.searchValue.toString());
-        NewsListModels dataList = newsListModelsFromJson(data.body);
-        emit(ListNewsLoaded(dataList));
-      } catch (e) {
-        emit(ListNewsError(e.toString()));
-      }
-    });
-  }
-}
