@@ -9,7 +9,7 @@ import '../../home_page/models/news_models.dart';
 class NewsDetailsPage extends StatefulWidget {
   NewsDetailsPage({super.key, required this.data});
 
-  Article data;
+  var data;
 
   @override
   State<NewsDetailsPage> createState() => _NewsDetailsPageState();
@@ -18,7 +18,6 @@ class NewsDetailsPage extends StatefulWidget {
 class _NewsDetailsPageState extends State<NewsDetailsPage> {
   @override
   Widget build(BuildContext context) {
-
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
     return SafeArea(

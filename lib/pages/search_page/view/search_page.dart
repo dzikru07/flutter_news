@@ -5,6 +5,7 @@ import 'package:unicons/unicons.dart';
 
 import '../../../component/error_handling/view/api_error.dart';
 import '../../../component/error_handling/view/network_error.dart';
+import '../../../component/format/time_format.dart';
 import '../../../style/color.dart';
 import '../bloc/search_bloc.dart';
 
@@ -38,6 +39,10 @@ class _SearchPageBlocState extends State<SearchPageBloc>
 
   late Animation<double> animated;
   late Animation<double> animated2;
+
+  TextEditingController searchData = TextEditingController();
+
+  int lengthData = 10;
 
   @override
   void initState() {
@@ -80,6 +85,15 @@ class _SearchPageBlocState extends State<SearchPageBloc>
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.dispose();
+    _controller2.dispose();
+    searchData.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SearchBloc searchDataResult = context.read<SearchBloc>();
 
@@ -116,11 +130,29 @@ class _SearchPageBlocState extends State<SearchPageBloc>
                         ScaleTransition(
                           scale: animated2,
                           child: Container(
+                            padding: EdgeInsets.only(left: 15),
                             height: 40,
                             width: _width / 1.5,
                             decoration: BoxDecoration(
-                                color: Colors.grey[200],
                                 borderRadius: BorderRadius.circular(12)),
+                            child: TextField(
+                              controller: searchData,
+                              decoration: InputDecoration(
+                                suffixIcon: InkWell(
+                                  onTap: () {
+                                    searchData.clear();
+                                  },
+                                  child: Icon(
+                                    UniconsLine.multiply,
+                                    size: 15,
+                                  ),
+                                ),
+                                hintText: "Search News",
+                              ),
+                              onSubmitted: (value) {
+                                searchDataResult.add(SearchEvent(value));
+                              },
+                            ),
                           ),
                         )
                       ],
@@ -154,6 +186,7 @@ class _SearchPageBlocState extends State<SearchPageBloc>
                   builder: (context, state) {
                     if (state is ListNewsLoaded) {
                       return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Number of News ${state.listData.totalResults}',
@@ -162,136 +195,199 @@ class _SearchPageBlocState extends State<SearchPageBloc>
                                 color: Colors.black87,
                                 fontWeight: FontWeight.w600),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
                           ListView.builder(
-                              itemCount: 5,
+                              itemCount: state.listData.articles.length <=
+                                      lengthData + 1
+                                  ? state.listData.articles.length
+                                  : lengthData + 1,
                               shrinkWrap: true,
                               physics: ScrollPhysics(),
                               itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () async {
-                                    // Navigator.of(context).pushNamed("/card/detail",
-                                    //     arguments: state.listData.articles[index]);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.all(8),
-                                    margin: EdgeInsets.only(top: 15),
-                                    decoration: BoxDecoration(
-                                        color: cardMainColor,
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: Row(
-                                      children: [
-                                        // Container(
-                                        //   height: 110,
-                                        //   width: 110,
-                                        //   decoration: BoxDecoration(
-                                        //       borderRadius: BorderRadius.circular(10),
-                                        //       image: DecorationImage(
-                                        //           image: NetworkImage(state
-                                        //               .listData.articles[index].urlToImage
-                                        //               .toString()),
-                                        //           fit: BoxFit.cover)),
-                                        // ),
-                                        SizedBox(
-                                          width: 12,
-                                        ),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              width: _width / 1.6,
-                                              child: Text(
-                                                "state.listData.articles[index].title",
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 2,
-                                                style: GoogleFonts.montserrat(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: cardTitleColor),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: _width / 1.6,
-                                              child: Text(
-                                                "state.listData.articles[index].description.toString()",
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 2,
-                                                style: GoogleFonts.montserrat(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: cardSubTitleColor),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            SizedBox(
-                                              width: _width / 1.6,
-                                              child: SingleChildScrollView(
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      padding:
-                                                          EdgeInsets.all(5),
-                                                      decoration: BoxDecoration(
-                                                          color: cardDateColor,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5)),
-                                                      child: Text(
-                                                        "asdlkasd adm;asd al;sd",
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                color: Colors
-                                                                    .white),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 8,
-                                                    ),
-                                                    Container(
-                                                      padding:
-                                                          EdgeInsets.all(5),
-                                                      decoration: BoxDecoration(
-                                                          color:
-                                                              cardAuthorColor,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5)),
-                                                      child: Text(
-                                                        "mdf sdlksf sfklsf sn",
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                color: Colors
-                                                                    .white),
-                                                      ),
-                                                    ),
-                                                  ],
+                                if (index < lengthData) {
+                                  return InkWell(
+                                    onTap: () async {
+                                      Navigator.of(context).pushNamed(
+                                          "/card/detail",
+                                          arguments:
+                                              state.listData.articles[index]);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(8),
+                                      margin: EdgeInsets.only(top: 15),
+                                      decoration: BoxDecoration(
+                                          color: cardMainColor,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            height: 110,
+                                            width: 110,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                    image: NetworkImage(state
+                                                        .listData
+                                                        .articles[index]
+                                                        .urlToImage
+                                                        .toString()),
+                                                    fit: BoxFit.cover)),
+                                          ),
+                                          SizedBox(
+                                            width: 12,
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: _width / 1.6,
+                                                child: Text(
+                                                  state.listData.articles[index]
+                                                      .title,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                  style: GoogleFonts.montserrat(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: cardTitleColor),
                                                 ),
                                               ),
-                                            )
-                                          ],
-                                        )
-                                      ],
+                                              SizedBox(
+                                                width: _width / 1.6,
+                                                child: Text(
+                                                  state.listData.articles[index]
+                                                      .description
+                                                      .toString(),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                  style: GoogleFonts.montserrat(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: cardSubTitleColor),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 8,
+                                              ),
+                                              SizedBox(
+                                                width: _width / 1.6,
+                                                child: SingleChildScrollView(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.all(5),
+                                                        decoration: BoxDecoration(
+                                                            color:
+                                                                cardDateColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5)),
+                                                        child: Text(
+                                                          FormatData()
+                                                              .getDataFormat(state
+                                                                  .listData
+                                                                  .articles[
+                                                                      index]
+                                                                  .publishedAt),
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  color: Colors
+                                                                      .white),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 8,
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.all(5),
+                                                        decoration: BoxDecoration(
+                                                            color:
+                                                                cardAuthorColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5)),
+                                                        child: Text(
+                                                          state
+                                                              .listData
+                                                              .articles[index]
+                                                              .author
+                                                              .toString(),
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  color: Colors
+                                                                      .white),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
+                                  );
+                                } else {
+                                  return index == lengthData
+                                      ? Center(
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                if (state.listData.articles
+                                                        .length <
+                                                    lengthData + 10) {
+                                                  lengthData = state
+                                                      .listData.articles.length;
+                                                } else {
+                                                  lengthData = lengthData + 10;
+                                                }
+                                              });
+                                            },
+                                            child: Container(
+                                                margin:
+                                                    EdgeInsets.only(top: 20),
+                                                padding: EdgeInsets.fromLTRB(
+                                                    15, 8, 15, 8),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    color: Colors.grey[200]),
+                                                child: Text(
+                                                  "Load More",
+                                                  style: GoogleFonts.montserrat(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Colors.black87),
+                                                )),
+                                          ),
+                                        )
+                                      : SizedBox();
+                                }
                               })
                         ],
                       );

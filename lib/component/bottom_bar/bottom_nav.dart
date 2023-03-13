@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unicons/unicons.dart';
+import '../../pages/favourite_page/view/favourite_page.dart';
 import '../../pages/home_page/view/home_page.dart';
 import '../../pages/search_page/view/search_page.dart';
 import '../../style/color.dart';
@@ -15,7 +16,7 @@ class _BottomNavBarState extends State<BottomNavBar>
     with TickerProviderStateMixin {
   int pageIndex = 0;
 
-  List page = [HomePage(), SearchPage(), HomePage(), HomePage()];
+  List page = [HomePage(), SearchPage(), FavouritePage(), HomePage()];
 
   late final AnimationController _controller;
   late final AnimationController _controller2;

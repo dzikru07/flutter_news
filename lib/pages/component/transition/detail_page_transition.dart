@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-
 import '../../detail_page/view/news_details.dart';
 
 class PageTransitionDetailCard extends PageRouteBuilder {

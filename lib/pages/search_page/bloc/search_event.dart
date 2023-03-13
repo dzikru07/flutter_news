@@ -3,7 +3,7 @@ part of 'search_bloc.dart';
 class SearchEvent extends Equatable {
   String searchValue;
 
-  SearchEvent([this.searchValue = ""]);
+  SearchEvent([this.searchValue = "health"]);
 
   @override
   // TODO: implement props

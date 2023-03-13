@@ -1,13 +1,15 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../component/error_handling/view/api_error.dart';
 import '../../../component/error_handling/view/network_error.dart';
 import '../../../component/format/time_format.dart';
 import '../../../style/color.dart';
+import '../../favourite_page/models/article_models.dart';
 import '../bloc/home_bloc_bloc.dart';
 
 class ListNewsCategory extends StatelessWidget {
@@ -37,7 +39,67 @@ class ListNewsCategoryBloc extends StatefulWidget {
   State<ListNewsCategoryBloc> createState() => _ListNewsCategoryBlocState();
 }
 
-class _ListNewsCategoryBlocState extends State<ListNewsCategoryBloc> {
+class _ListNewsCategoryBlocState extends State<ListNewsCategoryBloc>
+    with TickerProviderStateMixin {
+  late final AnimationController _controller;
+  late Animation<double> animated;
+
+  int dataFav = 0;
+
+  List<ArticlesModel> articleList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDataLocal();
+
+    _controller = AnimationController(
+      duration: Duration(milliseconds: 400),
+      vsync: this,
+    );
+
+    animated = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.bounceOut,
+    );
+  }
+
+  runAnimationControllerShow() async {
+    _controller.repeat();
+    await _controller.forward();
+    await Future.delayed(const Duration(
+      milliseconds: 600,
+    ));
+    _controller.reset();
+  }
+
+  addToLocalData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('action', jsonEncode(articleList));
+  }
+
+  getDataLocal() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? action = prefs.getString('action');
+    if (action == null) {
+      setState(() {
+        articleList = [];
+      });
+    } else {
+      setState(() {
+        articleList = articlesModelFromJson(action.toString());
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     HomeBlocBloc cobaListData = context.read<HomeBlocBloc>();
@@ -59,6 +121,35 @@ class _ListNewsCategoryBlocState extends State<ListNewsCategoryBloc> {
                     Navigator.of(context).pushNamed("/card/detail",
                         arguments: state.listData.articles[index]);
                   },
+                  onDoubleTap: () async {
+                    setState(() {
+                      dataFav = index;
+                    });
+                    var data = articleList.where((element) =>
+                        element.title == state.listData.articles[index].title);
+                    if (data.isEmpty) {
+                      articleList.add(ArticlesModel(
+                          source: Source(
+                              id: state.listData.articles[index].source.id
+                                  .toString(),
+                              name: state.listData.articles[index].source.name),
+                          author:
+                              state.listData.articles[index].author.toString(),
+                          title: state.listData.articles[index].title,
+                          description: state
+                              .listData.articles[index].description
+                              .toString(),
+                          url: state.listData.articles[index].url,
+                          urlToImage: state.listData.articles[index].urlToImage
+                              .toString(),
+                          publishedAt:
+                              state.listData.articles[index].publishedAt,
+                          content: state.listData.articles[index].content
+                              .toString()));
+                      addToLocalData();
+                    }
+                    runAnimationControllerShow();
+                  },
                   child: Container(
                     padding: EdgeInsets.all(8),
                     margin: EdgeInsets.only(top: 15),
@@ -67,16 +158,31 @@ class _ListNewsCategoryBlocState extends State<ListNewsCategoryBloc> {
                         borderRadius: BorderRadius.circular(15)),
                     child: Row(
                       children: [
-                        Container(
-                          height: 110,
-                          width: 110,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                  image: NetworkImage(state
-                                      .listData.articles[index].urlToImage
-                                      .toString()),
-                                  fit: BoxFit.cover)),
+                        Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            Container(
+                              height: 110,
+                              width: 110,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                      image: NetworkImage(state
+                                          .listData.articles[index].urlToImage
+                                          .toString()),
+                                      fit: BoxFit.cover)),
+                            ),
+                            dataFav == index
+                                ? ScaleTransition(
+                                    scale: animated,
+                                    child: Icon(
+                                      Icons.favorite,
+                                      size: 45,
+                                      color: Colors.red,
+                                    ),
+                                  )
+                                : SizedBox()
+                          ],
                         ),
                         SizedBox(
                           width: 12,
@@ -177,7 +283,7 @@ class _ListNewsCategoryBlocState extends State<ListNewsCategoryBloc> {
             height: _height,
             width: _width,
           );
-        } else { 
+        } else {
           return Center(
             child: CircularProgressIndicator(),
           );

@@ -38,6 +38,7 @@ dependencies:
   google_fonts: ^4.0.3
   http: ^0.13.5
   intl: ^0.18.0
+  shared_preferences: ^2.0.18
   unicons: ^2.1.0
 
 dev_dependencies:
