@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unicons/unicons.dart';
 
@@ -195,200 +196,213 @@ class _SearchPageBlocState extends State<SearchPageBloc>
                                 color: Colors.black87,
                                 fontWeight: FontWeight.w600),
                           ),
-                          ListView.builder(
-                              itemCount: state.listData.articles.length <=
-                                      lengthData + 1
-                                  ? state.listData.articles.length
-                                  : lengthData + 1,
-                              shrinkWrap: true,
-                              physics: ScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                if (index < lengthData) {
-                                  return InkWell(
-                                    onTap: () async {
-                                      Navigator.of(context).pushNamed(
-                                          "/card/detail",
-                                          arguments:
-                                              state.listData.articles[index]);
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.all(8),
-                                      margin: EdgeInsets.only(top: 15),
-                                      decoration: BoxDecoration(
-                                          color: cardMainColor,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            height: 110,
-                                            width: 110,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                image: DecorationImage(
-                                                    image: NetworkImage(state
-                                                        .listData
-                                                        .articles[index]
-                                                        .urlToImage
-                                                        .toString()),
-                                                    fit: BoxFit.cover)),
-                                          ),
-                                          SizedBox(
-                                            width: 12,
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                          AnimationLimiter(
+                            child: ListView.builder(
+                                itemCount: state.listData.articles.length <=
+                                        lengthData + 1
+                                    ? state.listData.articles.length
+                                    : lengthData + 1,
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  if (index < lengthData) {
+                                    return AnimationConfiguration.staggeredList(
+                                position: index,
+                                delay: Duration(milliseconds: 100),
+                                
+                                child: SlideAnimation(
+                                  duration: Duration(milliseconds: 2500),
+                                  curve: Curves.fastLinearToSlowEaseIn,
+                                  child: FadeInAnimation(
+                                      duration: Duration(milliseconds: 2500),
+                                  curve: Curves.fastLinearToSlowEaseIn,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          Navigator.of(context).pushNamed(
+                                              "/card/detail",
+                                              arguments:
+                                                  state.listData.articles[index]);
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(8),
+                                          margin: EdgeInsets.only(top: 15, left: 8, right: 8),
+                                          decoration: BoxDecoration(
+                                              color: cardMainColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          child: Row(
                                             children: [
-                                              SizedBox(
-                                                width: _width / 1.6,
-                                                child: Text(
-                                                  state.listData.articles[index]
-                                                      .title,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 2,
-                                                  style: GoogleFonts.montserrat(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: cardTitleColor),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: _width / 1.6,
-                                                child: Text(
-                                                  state.listData.articles[index]
-                                                      .description
-                                                      .toString(),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 2,
-                                                  style: GoogleFonts.montserrat(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: cardSubTitleColor),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 8,
-                                              ),
-                                              SizedBox(
-                                                width: _width / 1.6,
-                                                child: SingleChildScrollView(
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  child: Row(
-                                                    children: [
-                                                      Container(
-                                                        padding:
-                                                            EdgeInsets.all(5),
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                                cardDateColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5)),
-                                                        child: Text(
-                                                          FormatData()
-                                                              .getDataFormat(state
-                                                                  .listData
-                                                                  .articles[
-                                                                      index]
-                                                                  .publishedAt),
-                                                          style: GoogleFonts
-                                                              .montserrat(
-                                                                  fontSize: 12,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                  color: Colors
-                                                                      .white),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 8,
-                                                      ),
-                                                      Container(
-                                                        padding:
-                                                            EdgeInsets.all(5),
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                                cardAuthorColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5)),
-                                                        child: Text(
-                                                          state
-                                                              .listData
-                                                              .articles[index]
-                                                              .author
-                                                              .toString(),
-                                                          style: GoogleFonts
-                                                              .montserrat(
-                                                                  fontSize: 12,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                  color: Colors
-                                                                      .white),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  return index == lengthData
-                                      ? Center(
-                                          child: InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                if (state.listData.articles
-                                                        .length <
-                                                    lengthData + 10) {
-                                                  lengthData = state
-                                                      .listData.articles.length;
-                                                } else {
-                                                  lengthData = lengthData + 10;
-                                                }
-                                              });
-                                            },
-                                            child: Container(
-                                                margin:
-                                                    EdgeInsets.only(top: 20),
-                                                padding: EdgeInsets.fromLTRB(
-                                                    15, 8, 15, 8),
+                                              Container(
+                                                height: 110,
+                                                width: 110,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    color: Colors.grey[200]),
-                                                child: Text(
-                                                  "Load More",
-                                                  style: GoogleFonts.montserrat(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: Colors.black87),
-                                                )),
+                                                        BorderRadius.circular(10),
+                                                    image: DecorationImage(
+                                                        image: NetworkImage(state
+                                                            .listData
+                                                            .articles[index]
+                                                            .urlToImage
+                                                            .toString()),
+                                                        fit: BoxFit.cover)),
+                                              ),
+                                              SizedBox(
+                                                width: 12,
+                                              ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    width: _width / 1.8,
+                                                    child: Text(
+                                                      state.listData.articles[index]
+                                                          .title,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 2,
+                                                      style: GoogleFonts.montserrat(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: cardTitleColor),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: _width / 1.8,
+                                                    child: Text(
+                                                      state.listData.articles[index]
+                                                          .description
+                                                          .toString(),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 2,
+                                                      style: GoogleFonts.montserrat(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: cardSubTitleColor),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  SizedBox(
+                                                    width: _width / 1.8,
+                                                    child: SingleChildScrollView(
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            padding:
+                                                                EdgeInsets.all(5),
+                                                            decoration: BoxDecoration(
+                                                                color:
+                                                                    cardDateColor,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5)),
+                                                            child: Text(
+                                                              FormatData()
+                                                                  .getDataFormat(state
+                                                                      .listData
+                                                                      .articles[
+                                                                          index]
+                                                                      .publishedAt),
+                                                              style: GoogleFonts
+                                                                  .montserrat(
+                                                                      fontSize: 12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                      color: Colors
+                                                                          .white),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 8,
+                                                          ),
+                                                          Container(
+                                                            padding:
+                                                                EdgeInsets.all(5),
+                                                            decoration: BoxDecoration(
+                                                                color:
+                                                                    cardAuthorColor,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5)),
+                                                            child: Text(
+                                                              state
+                                                                  .listData
+                                                                  .articles[index]
+                                                                  .author
+                                                                  .toString(),
+                                                              style: GoogleFonts
+                                                                  .montserrat(
+                                                                      fontSize: 12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                      color: Colors
+                                                                          .white),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            ],
                                           ),
-                                        )
-                                      : SizedBox();
-                                }
-                              })
+                                        ),
+                                      ),
+                                )));
+                                  } else {
+                                    return index == lengthData
+                                        ? Center(
+                                            child: InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  if (state.listData.articles
+                                                          .length <
+                                                      lengthData + 10) {
+                                                    lengthData = state
+                                                        .listData.articles.length;
+                                                  } else {
+                                                    lengthData = lengthData + 10;
+                                                  }
+                                                });
+                                              },
+                                              child: Container(
+                                                  margin:
+                                                      EdgeInsets.only(top: 20),
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      15, 8, 15, 8),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      color: Colors.grey[200]),
+                                                  child: Text(
+                                                    "Load More",
+                                                    style: GoogleFonts.montserrat(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: Colors.black87),
+                                                  )),
+                                            ),
+                                          )
+                                        : SizedBox();
+                                  }
+                                }),
+                          )
                         ],
                       );
                     } else if (state is ListNewsApiError) {

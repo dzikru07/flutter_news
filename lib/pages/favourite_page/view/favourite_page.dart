@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_news/component/error_handling/view/empty_list.dart';
 import 'package:flutter_news/pages/favourite_page/models/article_models.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +19,7 @@ class FavouritePage extends StatefulWidget {
 
 class _FavouritePageState extends State<FavouritePage> {
   List<ArticlesModel> listData = [];
+  bool _isLoading = false;
 
   getDataLocal() async {
     final prefs = await SharedPreferences.getInstance();
@@ -31,6 +33,10 @@ class _FavouritePageState extends State<FavouritePage> {
         listData = articlesModelFromJson(action.toString());
       });
     }
+  setState(() {
+    _isLoading = false;
+    
+  });
   }
 
   @override
@@ -38,6 +44,7 @@ class _FavouritePageState extends State<FavouritePage> {
     // TODO: implement initState
     super.initState();
     getDataLocal();
+    _isLoading = true;
   }
 
   @override
@@ -47,7 +54,7 @@ class _FavouritePageState extends State<FavouritePage> {
 
     return SafeArea(
       child: Scaffold(
-        body: listData.isEmpty
+        body: _isLoading ?Center(child: CircularProgressIndicator(),) : listData.isEmpty
             ? Center(
                 child: EmptyListPage(
                     message: "No Data Has Been Saved",
@@ -67,135 +74,150 @@ class _FavouritePageState extends State<FavouritePage> {
                             color: Colors.black87,
                             fontWeight: FontWeight.w600),
                       ),
-                      ListView.builder(
-                          itemCount: listData.length,
-                          shrinkWrap: true,
-                          physics: ScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () async {
-                                Navigator.of(context).pushNamed("/card/detail",
-                                    arguments: listData[index]);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(8),
-                                margin: EdgeInsets.only(top: 15),
-                                decoration: BoxDecoration(
-                                    color: cardMainColor,
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      height: 110,
-                                      width: 110,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  listData[index]
-                                                      .urlToImage
-                                                      .toString()),
-                                              fit: BoxFit.cover)),
-                                    ),
-                                    SizedBox(
-                                      width: 12,
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: _width / 1.6,
-                                          child: Text(
-                                            listData[index].title,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: GoogleFonts.montserrat(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                                color: cardTitleColor),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: _width / 1.6,
-                                          child: Text(
-                                            listData[index]
-                                                .description
-                                                .toString(),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: GoogleFonts.montserrat(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                                color: cardSubTitleColor),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        SizedBox(
-                                          width: _width / 1.6,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
+                      AnimationLimiter(
+                        child: ListView.builder(
+                            itemCount: listData.length,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return AnimationConfiguration.staggeredList(
+                                position: index,
+                                delay: Duration(milliseconds: 100),
+                                
+                                child: SlideAnimation(
+                                  duration: Duration(milliseconds: 2500),
+                                  curve: Curves.fastLinearToSlowEaseIn,
+                                  child: FadeInAnimation(
+                                      duration: Duration(milliseconds: 2500),
+                                  curve: Curves.fastLinearToSlowEaseIn,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        Navigator.of(context).pushNamed("/card/detail",
+                                            arguments: listData[index]);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.all(8),
+                                        margin: EdgeInsets.only(top: 15, left: 8, right: 8),
+                                        decoration: BoxDecoration(
+                                            color: cardMainColor,
+                                            borderRadius: BorderRadius.circular(15)),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              height: 110,
+                                              width: 110,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          listData[index]
+                                                              .urlToImage
+                                                              .toString()),
+                                                      fit: BoxFit.cover)),
+                                            ),
+                                            SizedBox(
+                                              width: 12,
+                                            ),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Container(
-                                                  padding: EdgeInsets.all(5),
-                                                  decoration: BoxDecoration(
-                                                      color: cardDateColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5)),
+                                                SizedBox(
+                                                  width: _width / 1.8,
                                                   child: Text(
-                                                    FormatData().getDataFormat(
-                                                        listData[index]
-                                                            .publishedAt),
-                                                    style:
-                                                        GoogleFonts.montserrat(
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color:
-                                                                Colors.white),
+                                                    listData[index].title,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 2,
+                                                    style: GoogleFonts.montserrat(
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: cardTitleColor),
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  width: 8,
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.all(5),
-                                                  decoration: BoxDecoration(
-                                                      color: cardAuthorColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5)),
+                                                  width: _width / 1.8,
                                                   child: Text(
                                                     listData[index]
-                                                        .author
+                                                        .description
                                                         .toString(),
-                                                    style:
-                                                        GoogleFonts.montserrat(
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color:
-                                                                Colors.white),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 2,
+                                                    style: GoogleFonts.montserrat(
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w500,
+                                                        color: cardSubTitleColor),
                                                   ),
                                                 ),
+                                                SizedBox(
+                                                  height: 8,
+                                                ),
+                                                SizedBox(
+                                                  width: _width / 1.8,
+                                                  child: SingleChildScrollView(
+                                                    scrollDirection: Axis.horizontal,
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                          padding: EdgeInsets.all(5),
+                                                          decoration: BoxDecoration(
+                                                              color: cardDateColor,
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      5)),
+                                                          child: Text(
+                                                            FormatData().getDataFormat(
+                                                                listData[index]
+                                                                    .publishedAt),
+                                                            style:
+                                                                GoogleFonts.montserrat(
+                                                                    fontSize: 12,
+                                                                    fontWeight:
+                                                                        FontWeight.w500,
+                                                                    color:
+                                                                        Colors.white),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Container(
+                                                          padding: EdgeInsets.all(5),
+                                                          decoration: BoxDecoration(
+                                                              color: cardAuthorColor,
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      5)),
+                                                          child: Text(
+                                                            listData[index]
+                                                                .author
+                                                                .toString(),
+                                                            style:
+                                                                GoogleFonts.montserrat(
+                                                                    fontSize: 12,
+                                                                    fontWeight:
+                                                                        FontWeight.w500,
+                                                                    color:
+                                                                        Colors.white),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
                                               ],
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            );
-                          }),
+                              );
+                            }),
+                      ),
                     ],
                   ),
                 ),
