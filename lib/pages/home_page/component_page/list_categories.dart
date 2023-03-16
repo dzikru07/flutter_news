@@ -1,11 +1,7 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../component/error_handling/view/api_error.dart';
 import '../../../component/error_handling/view/network_error.dart';
 import '../../../component/format/time_format.dart';
