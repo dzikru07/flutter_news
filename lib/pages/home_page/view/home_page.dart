@@ -1,12 +1,6 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../../component/error_handling/view/api_error.dart';
-import '../../../component/error_handling/view/network_error.dart';
-import '../../../style/color.dart';
-import '../bloc/home_bloc_bloc.dart';
-import '../component_page/list_categories.dart';
+import '../../../component/import_file/import_data.dart';
+import '../../../component/import_file/import_data_pages.dart';
+import '../home_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -39,8 +33,8 @@ class _HomePageBlocState extends State<HomePageBloc>
   @override
   Widget build(BuildContext context) {
     HomeBlocBloc cobaListData = context.read<HomeBlocBloc>();
-    double _width = MediaQuery.of(context).size.width;
-    double _height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -192,14 +186,14 @@ class _HomePageBlocState extends State<HomePageBloc>
                     } else if (state is ListNewsApiError) {
                       return ErrorApiPage(
                         message: state.data.message,
-                        height: _height,
-                        width: _width,
+                        height: height,
+                        width: width,
                       );
                     } else if (state is ListNewsError) {
                       return ErrorNetworkPage(
                         message: state.message,
-                        height: _height,
-                        width: _width,
+                        height: height,
+                        width: width,
                       );
                     } else {
                       return Center(
@@ -251,7 +245,7 @@ class _HomePageBlocState extends State<HomePageBloc>
                   ],
                 ),
                 SizedBox(
-                  height: _height / 2,
+                  height: height / 2,
                   child: TabBarView(
                     controller: _tabController,
                     children: <Widget>[

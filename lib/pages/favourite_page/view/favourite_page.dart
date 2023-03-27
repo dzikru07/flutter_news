@@ -1,12 +1,9 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_news/component/error_handling/view/empty_list.dart';
-import 'package:flutter_news/pages/favourite_page/models/article_models.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../component/format/time_format.dart';
 import '../../../component/local_data/cubit/local_data_cubit.dart';

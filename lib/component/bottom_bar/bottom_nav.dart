@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:unicons/unicons.dart';
+//global import
+import '../../../component/import_file/import_data.dart';
+//----------------------------------------------------------------
 import '../../pages/favourite_page/view/favourite_page.dart';
 import '../../pages/home_page/view/home_page.dart';
 import '../../pages/search_page/view/search_page.dart';
-import '../../style/color.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});

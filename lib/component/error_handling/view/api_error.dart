@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:unicons/unicons.dart';
+import '../../../component/import_file/import_data.dart';
 
 class ErrorApiPage extends StatelessWidget {
   ErrorApiPage(

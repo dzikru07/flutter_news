@@ -1,7 +1,5 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../../style/color.dart';
+//global import
+import '../../../component/import_file/import_data.dart';
 
 class SplashScreenPage extends StatefulWidget {
   @override

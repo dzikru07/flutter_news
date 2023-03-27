@@ -2,7 +2,7 @@
 //
 //     final errorModels = errorModelsFromJson(jsonString);
 
-import 'dart:convert';
+import '../../../component/import_file/import_data.dart';
 
 ErrorModels errorModelsFromJson(String str) =>
     ErrorModels.fromJson(json.decode(str));
