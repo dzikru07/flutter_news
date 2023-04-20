@@ -4,7 +4,7 @@ class ApiService {
   final String _url = "newsapi.org";
 
   getApiKey() {
-    String _apiKey = "5ed063c09d5040cc9894837e19c9ec4e";
+    String _apiKey = "";
     return _apiKey;
   }
 
